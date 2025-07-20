@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
 
-export const authCallback = async (req, res) => {
+export const authCallback = async (req, res, next) => {
   try {
     const { id, firstName, lastName, imageUrl } = req.body; // this is how clerk stores it
 
@@ -19,11 +19,12 @@ export const authCallback = async (req, res) => {
       .json({ success: true, message: `User signed up successfully` });
   } catch (error) {
     console.log("error in auth callback route:", error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: `Error in auth callback route: ${error.message}`,
-      });
+    // res
+    //   .status(500)
+    //   .json({
+    //     success: false,
+    //     message: `Error in auth callback route: ${error.message}`,
+    //   });
+    next(error); // Pass the error to the next middleware for centralized error handling
   }
 };
